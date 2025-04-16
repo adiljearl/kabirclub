@@ -1133,7 +1133,7 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
   }
-  const port = 4500;
+  const port = 3000;
   server.listen({
     port,
     // host: "0.0.0.0",
