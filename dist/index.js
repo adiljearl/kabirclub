@@ -1133,7 +1133,8 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
   }
-  const port = 3000;
+  // const port = 4500;
+  const port = process.env.PORT || 4500;
   server.listen({
     port,
     // host: "0.0.0.0",
