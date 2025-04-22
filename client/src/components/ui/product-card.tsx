@@ -133,14 +133,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
                 <span>Rs {price.toFixed(2)}</span>
               {/* )} */}
             </div>
-            <Button 
+            {/* <Button 
               variant="default" 
               className="bg-primary text-white text-sm px-3 py-1 rounded hover:bg-[#e53e3e] transition"
               onClick={() => addToCart.mutate()}
               disabled={addToCart.isPending}
             >
               Add to Cart
-            </Button>
+            </Button> */}
           </div>
         </CardContent>
       </Card>

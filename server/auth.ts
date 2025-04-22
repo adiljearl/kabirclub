@@ -10,6 +10,7 @@ import { createId } from '@paralleldrive/cuid2';
 import {db} from '../db';
 import {users} from '../shared/schema';
 import {eq} from "drizzle-orm";
+import { Navigate } from 'react-router-dom';
 
 
 // Create memory store for sessions
@@ -257,7 +258,7 @@ export function configureAuth(app: Express) {
       user: req.user
     });
   });
-  
+
   // Middleware to check if user is admin
   app.use('/api/admin/*', (req: Request, res: Response, next: NextFunction) => {
     if (!req.isAuthenticated()) {
@@ -268,14 +269,8 @@ export function configureAuth(app: Express) {
     }
     
     const user = req.user as any;
-    // if (user.role !== UserRole.ADMIN) {
-    //   return res.status(403).json({
-    //     success: false,
-    //     message: 'Not authorized'
-    //   });
-    // }
     if (!req.user || (req.user as any).role !== UserRole.ADMIN){
-      return res.status(403).json({
+      return res.status(404).json({
         success: false,
         message: 'Not authorized',
       })
@@ -284,7 +279,7 @@ export function configureAuth(app: Express) {
     next();
   });
 }
-
+// res.status(404).json({ message: "Product not found" });
 //check if user is present in "users" table
 export async function getUserByEmailDB(email: string) {
   try {

@@ -119,7 +119,7 @@ export const Cart = () => {
   };
 
   const cart_items_Array = cart_items ? Object.values(cart_items) : [];
-  console.log("IS IT ARRAY NOW ?", Array.isArray(cart_items_Array));
+  // console.log("IS IT ARRAY NOW ?", Array.isArray(cart_items_Array));
 
   let subtotal = 0;
   cart_items_Array.forEach((items) => {

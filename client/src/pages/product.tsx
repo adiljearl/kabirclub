@@ -17,6 +17,8 @@ import {
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import FeaturedProducts from '@/components/home/featured-products';
+import Category from './category';
+import { response } from 'express';
 
 export const Product = () => {
   const { id } = useParams();
@@ -48,13 +50,13 @@ export const Product = () => {
           size: selectedSize,
         }),
       });
-      // console.log("CART RESPONSE:", response);
-      // return apiRequest('POST', '/api/cart', {
-      //   product_id: id,
-      //   quantity: quantity,
-      //   size: selectedSize,
-      // });
+      if(!response.ok){
+        const errData = await response.json();
+        throw new Error(errData.message || 'Failed to add item in the cart');
+      }
+      return await response.json();
     },
+
     onSuccess: () => {
       toast({
         title: 'Added to cart',
@@ -160,12 +162,6 @@ export const Product = () => {
             <div className="mb-6">
               <div className="flex justify-between items-center">
                 <h3 className="font-medium mb-2">Select Size</h3>
-                {/* <button
-                  onClick={() => setShowSizeChart(!showSizeChart)}
-                  className="text-sm text-[#e53e3e] underline"
-                >
-                  {showSizeChart ? 'Hide Size Chart' : 'View Size Chart'}
-                </button> */}
               </div>
               <div className="flex space-x-2">
               {availableSizes.map((size) => (
@@ -181,7 +177,7 @@ export const Product = () => {
               </div>
 
               {/* Size Chart */}
-              {(
+              { product.categoryname !== "Accessories" && (
                 <div className="mt-4 bg-neutral-100 p-4 rounded-lg border">
                   <h3 className="text-lg font-semibold mb-2">Size Chart (in inches)</h3>
 
@@ -275,6 +271,45 @@ export const Product = () => {
                 </div>
 
               )}
+              {/* Size Chart */}
+            { product.categoryname == "Accessories" && (
+                <div className="mt-4 bg-neutral-100 p-4 rounded-lg border">
+                  <h3 className="text-lg font-semibold mb-2">Size Chart (in ml)</h3>
+
+                  {/* Shirt Size Chart */}
+                  <div className="overflow-x-auto mb-6">
+                    {/* <h4 className="text-md font-semibold mb-2">Shirt Sizes</h4> */}
+                    <table className="table-auto w-full border-collapse border border-neutral-300">
+                      <thead className="bg-neutral-200 text-neutral-700">
+                        <tr>
+                          <th className="px-4 py-2 border">Size</th>
+                          <th className="px-4 py-2 border">Quantity</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-neutral-600">
+                        <tr>
+                          <td className="px-4 py-2 border">S</td>
+                          <td className="px-4 py-2 border">5</td>
+                        </tr>
+                        <tr>
+                          <td className="px-4 py-2 border">M</td>
+                          <td className="px-4 py-2 border">10</td>
+                        </tr>
+                        <tr>
+                          <td className="px-4 py-2 border">L</td>
+                          <td className="px-4 py-2 border">15</td>
+                        </tr>
+                        <tr>
+                          <td className="px-4 py-2 border">XL</td>
+                          <td className="px-4 py-2 border">20</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              )}
+              
             </div>
 
             <div className="mb-6">

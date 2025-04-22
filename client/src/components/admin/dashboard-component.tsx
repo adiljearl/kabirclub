@@ -14,9 +14,11 @@ import Category from '@/pages/category';
 import axios from 'axios';
 import { navigate } from 'wouter/use-browser-location';
 import { categories } from '@shared/schema';
+import { useNavigate } from 'react-router-dom';
 
 // Available sizes
-const AVAILABLE_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+const AVAILABLE_SIZES_CLOTHES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+
 
 // Main Admin Dashboard Component
 export const AdminDashboard = () => {   //make it use slug for more reliability
@@ -263,7 +265,7 @@ const ProductForm = ({ product, onSave, onCancel }) => {
     stockQuantity: product?.stock_quantity || 1,
     description: product?.description || '',
     imageUrl: product?.image_url || '',
-    sizes: product?.sizes || AVAILABLE_SIZES.reduce((acc, size) => {
+    sizes: product?.sizes || AVAILABLE_SIZES_CLOTHES.reduce((acc, size) => {
       acc[size] = false;
       return acc;
     }, {})
@@ -370,7 +372,7 @@ const ProductForm = ({ product, onSave, onCancel }) => {
       <div>
         <label className="block mb-2 text-sm font-medium">Available Sizes</label>
         <div className="flex flex-wrap gap-4">
-          {AVAILABLE_SIZES.map(size => (
+          {AVAILABLE_SIZES_CLOTHES.map(size => (
             <div key={size} className="flex items-center space-x-2">
               <Checkbox
                 id={`size-${size}`}

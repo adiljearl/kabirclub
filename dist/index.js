@@ -381,7 +381,7 @@ function configureAuth(app2) {
     }
     const user = req.user;
     if (!req.user || req.user.role !== "admin" /* ADMIN */) {
-      return res.status(403).json({
+      return res.status(404).json({
         success: false,
         message: "Not authorized"
       });
@@ -797,6 +797,16 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: error.message });
     }
   });
+  app2.get("/api/isAdmin", async (req, res) => {
+    try {
+      const currUser = req.user.role;
+      if (currUser == void 0)
+        console.log("user is undefined");
+    } catch (error) {
+      console.log("INSIDE CATCH");
+      res.status(500).json({ message: error.message });
+    }
+  });
   app2.get("/api/cart", async (req, res) => {
     try {
       if (!req.isAuthenticated()) {
@@ -916,7 +926,6 @@ async function registerRoutes(app2) {
       const { name, description, price, imageUrl, sizes, stockQuantity, trending, featured, item_id, expandedCategory } = result.data;
       const x = await db.select({ id: categories.id }).from(categories).where(eq2(categories.name, expandedCategory));
       const categoryId = x[0].id;
-      console.log("WHAT IS catId", categoryId);
       const productData = {
         name,
         description,
@@ -1133,8 +1142,7 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
   }
-  // const port = 4500;
-  const port = process.env.PORT || 4500;
+  const port = 4500;
   server.listen({
     port,
     // host: "0.0.0.0",
