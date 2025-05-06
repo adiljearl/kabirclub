@@ -152,24 +152,20 @@ var loginUserSchema = z.object({
 });
 
 // db.ts
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import dotenv from "dotenv";
+import { drizzle } from "drizzle-orm/node-postgres";
 import pkg from "pg";
-dotenv.config();
+import dotenv from "dotenv";
 var { Pool } = pkg;
+dotenv.config();
 var pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+  password: process.env.DB_PASSWORD,
+  // ✅ Add password if not already included
+  port: Number(process.env.DB_PORT)
 });
-var connectionString = process.env.DATABASE_URL;
-if (!connectionString) {
-  throw new Error("DATABASE_URL is not set in the environment.");
-}
-var sql = postgres(connectionString);
-var db = drizzle(sql, { schema: schema_exports });
+var db = drizzle(pool, { schema: schema_exports });
 
 // server/auth.ts
 import passport from "passport";
@@ -651,8 +647,8 @@ async function registerRoutes(app2) {
     }
   });
   app2.get("/api/products", async (req, res) => {
-    const categoryFromDB = await db.select({ category: categories.id }).from(categories).where(eq2(categories.name, req.query.category));
     try {
+      const categoryFromDB = await db.select({ category: categories.id }).from(categories).where(eq2(categories.name, req.query.category));
       const { rows } = await pool.query(
         "SELECT * FROM products WHERE category_id = $1",
         [categoryFromDB[0]?.category]

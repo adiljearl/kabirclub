@@ -1,29 +1,19 @@
-// src/db.ts
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
-import * as schema from './shared/schema'
-import dotenv from 'dotenv';
-dotenv.config();
+import { drizzle } from "drizzle-orm/node-postgres"; // ✅ NOTE: switched from postgres-js
+// import { Pool } from "pg";
 import pkg from 'pg';
 const { Pool } = pkg;
+import * as schema from './shared/schema';
+import dotenv from 'dotenv';
 
-export const pool = new Pool({
+dotenv.config();
+
+const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
-  });
+  password: process.env.DB_PASSWORD, // ✅ Add password if not already included
+  port: Number(process.env.DB_PORT),
+});
 
-// import { Pool } from 'pg';
-// Load DATABASE_URL from the .env file
-const connectionString = process.env.DATABASE_URL;
-
-if (!connectionString) {
-  throw new Error("DATABASE_URL is not set in the environment.");
-}
-
-// Create a PostgreSQL connection using postgres-js
-const sql = postgres(connectionString);
-
-// Create Drizzle instance
-export const db = drizzle(sql, {schema});
+export const db = drizzle(pool, { schema }); // ✅ Drizzle uses pg Pool here
+export { pool }; // Reuse in raw queries
