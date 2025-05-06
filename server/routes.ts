@@ -64,10 +64,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Products in dropdown
   app.get('/api/products', async (req, res) => {
-    const categoryFromDB = await db.select({category: categories.id})
-    .from(categories)
-    .where(eq(categories.name,req.query.category));
     try {
+      const categoryFromDB = await db.select({category: categories.id})
+      .from(categories)
+      .where(eq(categories.name,req.query.category));
       const { rows } = await pool.query(
         'SELECT * FROM products WHERE category_id = $1', 
         [categoryFromDB[0]?.category]
