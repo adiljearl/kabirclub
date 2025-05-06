@@ -797,16 +797,6 @@ async function registerRoutes(app2) {
       res.status(500).json({ message: error.message });
     }
   });
-  app2.get("/api/isAdmin", async (req, res) => {
-    try {
-      const currUser = req.user.role;
-      if (currUser == void 0)
-        console.log("user is undefined");
-    } catch (error) {
-      console.log("INSIDE CATCH");
-      res.status(500).json({ message: error.message });
-    }
-  });
   app2.get("/api/cart", async (req, res) => {
     try {
       if (!req.isAuthenticated()) {

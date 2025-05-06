@@ -232,19 +232,19 @@ app.put('/api/products/:id', async (req, res) => {
     }
   });
 
-  app.get("/api/isAdmin", async (req: Request, res: Response) => {
-    try{
-      const currUser = req.user.role;
-      if(currUser == undefined)
-        console.log("user is undefined");
-    }
-    catch(error: any)
-    {
-      console.log('INSIDE CATCH');
-      res.status(500).json({message: error.message});
-    }
+  // app.get("/api/isAdmin", async (req: Request, res: Response) => {
+  //   try{
+  //     const currUser = req.user.role;
+  //     if(currUser == undefined)
+  //       console.log("user is undefined");
+  //   }
+  //   catch(error: any)
+  //   {
+  //     console.log('INSIDE CATCH');
+  //     res.status(500).json({message: error.message});
+  //   }
 
-  })
+  // })
 
   // view cart
   app.get("/api/cart", async (req: Request, res: Response) => {

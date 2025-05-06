@@ -29,8 +29,11 @@ export const WaitlistForm = () => {
   });
 
   const joinWaitlist = useMutation({
-    mutationFn: async (data: WaitlistFormValues) => {
-      return apiRequest('POST', '/api/waitlist', data);
+    mutationFn: async (formData: {name: string, email: string}) => {
+      const resposne = await fetch('/api/waitlist',{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+      })
     },
     onSuccess: () => {
       toast({
@@ -47,6 +50,10 @@ export const WaitlistForm = () => {
       });
     },
   });
+
+  const joinNowForm = () =>{
+    return apiRequest('POST','/api/joinNowFormAPI',{name: name, email: email})
+  }
 
   const onSubmit = (data: WaitlistFormValues) => {
     joinWaitlist.mutate(data);
@@ -122,7 +129,7 @@ export const WaitlistForm = () => {
                   type="submit" 
                   className="px-6 py-3 bg-[#e53e3e] text-white font-heading font-medium rounded-md hover:bg-red-700 transition"
                   disabled={joinWaitlist.isPending}
-                >
+                  >
                   {joinWaitlist.isPending ? "Joining..." : "Join Now"}
                 </Button>
               </form>
